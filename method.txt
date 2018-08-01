@@ -1,0 +1,9 @@
+（1）在各区域分别创建一个instance作为客户端，获取这些客户端的内部IP（client_external_ip.json）和外部IP(client_internal_ip.json)
+（2）将client的外部地址上传到server，与server代码同目录
+（3）在客户端上运行client_install.sh
+（4）在客户端上运行client_final，参数为该客户端的内部地址 python client_final.py server_external_ip client_internal_ip
+（5）运行server_final
+（6）客户端的实验数据保存在new_results.txt中
+（7）服务器端的实验数据保存在~/gowork/src/github.com/mholt/caddy/caddy/network_test.txt中
+
+根目录均为/home/johnsonli1993/
