@@ -19,6 +19,7 @@ host = sys.argv[2]
 port = 8698
 
 user_dir = '/home/johnsonli1993/'
+os.system('iperf3 -sD')
 
 def get_max(a, b):
 	if a > b:

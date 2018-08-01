@@ -15,6 +15,7 @@ network_test = open('network_test.txt', 'wb')
 
 host = '10.166.0.2'
 server = []
+iperf_data = []
 
 websites_path = '/home/johnsonli1993/websites/'
 
@@ -74,6 +75,9 @@ if __name__ == '__main__':
         server.append(socket.socket(socket.AF_INET, socket.SOCK_STREAM))
         server[i].bind((host, port))
         server[i].connect(clientAddr)
+        print('Test bandwidth to: %s' % clientHost)
+        iperf_data.append(json.loads(subprocess.check_output(['iperf3', '-Jc', clientHost])))
+        print('Bandwidth: %s' % iperf_data[-1]['end']['sum_sent']['bits_per_second'])
 
     for web in webTop500.readlines():
         data = ''
