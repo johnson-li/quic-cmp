@@ -92,6 +92,8 @@ if __name__ == '__main__':
 					time.sleep(wait_time)
 					loadtime_file = open(user_dir + 'Downloads/loadtime.txt', 'r')
 					loadtime_str = loadtime_file.readline().strip(' ')[3:]
+					if test_times == 0: conn_time_str = loadtime_str.split(' ')[1]
+					loadtime_str = loadtime_str.split(' ')[0]
 					loadtime = float(loadtime_str)
 					loadtime_list.append(loadtime)
 					os.remove(user_dir + 'Downloads/loadtime.txt')
@@ -121,7 +123,7 @@ if __name__ == '__main__':
 			temp = ''
 			print url
 			loadtime_list.sort()
-			temp = temp + url + ',' + str(loadtime_list[2]) + '\n'
+			temp = temp + url + ',' + str(loadtime_list[2]) + conn_time_str + '\n'
 			result.write(temp)
 			result.flush()
 		print 'client completed!'
