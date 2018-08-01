@@ -123,7 +123,7 @@ if __name__ == '__main__':
 			temp = ''
 			print url
 			loadtime_list.sort()
-			temp = temp + url + ',' + str(loadtime_list[2]) + conn_time_str + '\n'
+			temp = temp + url + ',' + str(loadtime_list[2]) + ',' + conn_time_str + '\n'
 			result.write(temp)
 			result.flush()
 		print 'client completed!'
