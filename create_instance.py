@@ -156,7 +156,7 @@ if __name__ == '__main__':
     client_internal_ip = {}
     for zone in zone_list:
         name = 'client-' + zone
-        # main(project_id, bucket_name, zone, name)
+        main(project_id, bucket_name, zone, name)
     for zone in zone_list:
         name = 'client-' + zone
         request = compute.instances().list(project=project_id, zone=zone)
