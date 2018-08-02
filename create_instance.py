@@ -97,6 +97,18 @@ def wait_for_operation(compute, project, zone, operation):
         time.sleep(1)
 # [END wait_for_operation]
 
+def stop_instance(compute, project, zone, name):
+    return compute.instances().stop(
+        project=project,
+        zone=zone,
+        instance=name).execute()
+
+def start_instance(compute, project, zone, name):
+    return compute.instances().start(
+        project=project,
+        zone=zone,
+        instance=name).execute()
+
 
 # [START run]
 def main(project, bucket, zone, instance_name, wait=True):
@@ -156,9 +168,7 @@ if __name__ == '__main__':
                 client_external_ip[zone] = external_ip
                 client_internal_ip[zone] = internal_ip
             # request = compute.instances().list_next(previous_request=request, previous_response=response)
-    # for zone in zone_list:
-    #     name = 'client-' + zone
-    #     delete_instance(compute, project_id, zone, name)
+    
     print client_external_ip
     print client_internal_ip
     with open('./client_external_ip.json', 'w') as json_file:
@@ -167,4 +177,11 @@ if __name__ == '__main__':
     with open('./client_internal_ip.json', 'w') as json_file:
         json.dump(client_internal_ip, json_file)
     json_file.close()
+
+    # for zone in zone_list:
+    #     name = 'client-' + zone
+    #     stop_instance(compute, project_id, zone, name)
+    # for zone in zone_list:
+    #     name = 'client-' + zone
+    #     start_instance(compute, project_id, zone, name)
 # [END run]
