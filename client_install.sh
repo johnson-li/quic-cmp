@@ -1,4 +1,4 @@
-sudo yum install -y wget
+sudo yum install -y wget hping3 iperf3
 sudo yum install -y libXcomposite libXcursor libXi libXrandr xdg-utils nss GConf2 cups redhat-lsb-core-4.1-27.el7.centos.1.x86_64 gtk3 libXScrnSaver libXdamage libXtst
 sudo rpm -ivh google-chrome-stable_current_x86_64_63.0.3239.84.rpm
 sudo yum install -y Xvfb libXfont xorg-x11-fonts-misc.noarch xorg-x11-fonts-ethiopic.noarch xorg-x11-fonts-cyrillic.noarch xorg-x11-fonts-Type1.noarch xorg-x11-fonts-ISO8859-9-75dpi xorg-x11-fonts-ISO8859-9-100dpi screen lrzsz
