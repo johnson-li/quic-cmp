@@ -18,7 +18,7 @@ serverDomain = 'tang123456.net'
 host = sys.argv[2]
 port = 8698
 
-user_dir = '/home/johnsonli1993/'
+user_dir = '/home/cooperate/'
 os.system('iperf3 -sD')
 
 def get_max(a, b):
@@ -38,7 +38,7 @@ def ping(target='localhost', host=80):
 	return data
 
 if __name__ == '__main__':
-	result = open('/home/johnsonli1993/new_results.txt', 'w')
+	result = open(user_dir + 'new_results.txt', 'w')
 	log = open('log.txt', 'wb')
 
 	client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -63,7 +63,7 @@ if __name__ == '__main__':
 		display.start()
 		url = data.split(':')[1].strip()
 		driverOptions = webdriver.ChromeOptions()
-		driverOptions.add_argument('--load-extension=' + '/home/johnsonli1993/mypagetest')
+		driverOptions.add_argument('--load-extension=' + user_dir + 'mypagetest')
 		driverOptions.add_argument('--no-proxy-server')
 		driverOptions.add_argument('--disable-application-cache')
 		driverOptions.add_argument('--aggressive-cache-discard')
@@ -87,7 +87,7 @@ if __name__ == '__main__':
 				try:
 					if os.path.exists(user_dir + 'Downloads/loadtime.txt'):
 						os.remove(user_dir + 'Downloads/loadtime.txt')
-					browser = webdriver.Chrome("/home/johnsonli1993/chromedriver", chrome_options=driverOptions)
+					browser = webdriver.Chrome(user_dir + "chromedriver", chrome_options=driverOptions)
 					browser.get("https://" + serverDomain)
 					time.sleep(wait_time)
 					loadtime_file = open(user_dir + 'Downloads/loadtime.txt', 'r')
@@ -115,7 +115,7 @@ if __name__ == '__main__':
 					os.system(sync_command)
 					free_m_command = "sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'"
 					os.system(free_m_command)
-					browser = webdriver.Chrome("/home/johnsonli1993/chromedriver", chrome_options=driverOptions)
+					browser = webdriver.Chrome(user_dir + "chromedriver", chrome_options=driverOptions)
 			if wait_time < 30: test_times += 1
 			if test_times == 5: break
 			sum_times += 1
