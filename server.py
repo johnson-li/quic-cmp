@@ -78,6 +78,8 @@ if __name__ == '__main__':
         print('Test bandwidth to: %s' % clientHost)
         iperf_data.append(json.loads(subprocess.check_output(['iperf3', '-Jc', clientHost])))
         print('Bandwidth: %s' % iperf_data[-1]['end']['sum_sent']['bits_per_second'])
+        network_test.write(clientHost + '\n')
+        network_test.write('Bandwidth: %s \n' % iperf_data[-1]['end']['sum_sent']['bits_per_second'])
 
     for web in webTop500.readlines():
         data = ''
