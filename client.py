@@ -18,7 +18,7 @@ serverDomain = 'tang123456.net'
 host = sys.argv[2]
 port = 8698
 
-user_dir = '/home/cooperate/'
+user_dir = '/home/cooperate/quic-cmp'
 os.system('iperf3 -sD')
 
 def get_max(a, b):
@@ -82,6 +82,8 @@ if __name__ == '__main__':
 			while wait_time < 30:
 				if flag: break
 				try:
+                                        if not os.path.exists(user_dir + 'Downloads'):
+						os.makedirs(user_dir + 'Downloads')
 					if os.path.exists(user_dir + 'Downloads/loadtime.txt'):
 						os.remove(user_dir + 'Downloads/loadtime.txt')
 					browser = webdriver.Chrome(user_dir + "chromedriver", chrome_options=driverOptions)
