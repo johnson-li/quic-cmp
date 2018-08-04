@@ -39,7 +39,6 @@ def ping(target='localhost', host=80):
 
 if __name__ == '__main__':
 	result = open(user_dir + 'new_results.txt', 'w')
-	log = open('log.txt', 'wb')
 
 	client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	client.bind((host, port))
@@ -56,8 +55,6 @@ if __name__ == '__main__':
 	while 1:
 		data = clientConn.recv(1024)
 		print data
-		log.write(data)
-		log.write('\n')
 		if not data.startswith('Server ready:'): continue
 		display = Display(visible=0, size=(800,600))
 		display.start()
@@ -105,11 +102,8 @@ if __name__ == '__main__':
 					flag = True
 				except Exception as e:
 					traceback.print_exc()
-					log.write(str(e))
 					wait_time += 10
 					print wait_time
-					log.write(str(wait_time))
-					log.write('\n')
 					browser.quit()
 					sync_command = 'sync'
 					os.system(sync_command)
