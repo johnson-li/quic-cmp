@@ -40,6 +40,8 @@ def ping(target='localhost', host=80):
 if __name__ == '__main__':
 	result = open(user_dir + 'new_results.txt', 'w')
 
+	os.system('sudo yum remove -y google-chrome')
+    os.system('sudo rpm -ivh google-chrome-stable_current_x86_64_63.0.3239.84.rpm')
 	client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	client.bind((host, port))
 	client.listen(3)
@@ -82,20 +84,18 @@ if __name__ == '__main__':
 			while wait_time < 30:
 				if flag: break
 				try:
-                                        if not os.path.exists(user_dir + 'Downloads'):
-						os.makedirs(user_dir + 'Downloads')
-					if os.path.exists(user_dir + 'Downloads/loadtime.txt'):
-						os.remove(user_dir + 'Downloads/loadtime.txt')
+					if os.path.exists('/home/cooperate/Downloads/loadtime.txt'):
+						os.remove('/home/cooperate/Downloads/loadtime.txt')
 					browser = webdriver.Chrome(user_dir + "chromedriver", chrome_options=driverOptions)
 					browser.get("https://" + serverDomain)
 					time.sleep(wait_time)
-					loadtime_file = open(user_dir + 'Downloads/loadtime.txt', 'r')
+					loadtime_file = open('/home/cooperate/Downloads/loadtime.txt', 'r')
 					loadtime_str = loadtime_file.readline().strip(' ')[3:]
 					if test_times == 0: conn_time_str = loadtime_str.split(' ')[1]
 					loadtime_str = loadtime_str.split(' ')[0]
 					loadtime = float(loadtime_str)
 					loadtime_list.append(loadtime)
-					os.remove(user_dir + 'Downloads/loadtime.txt')
+					os.remove('/home/cooperate/Downloads/loadtime.txt')
 					browser.quit()
 					sync_command = 'sync'
 					os.system(sync_command)
