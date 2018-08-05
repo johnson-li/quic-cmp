@@ -18,7 +18,7 @@ serverDomain = 'tang123456.net'
 host = sys.argv[2]
 port = 8698
 
-user_dir = '/home/cooperate/quic-cmp'
+user_dir = '/home/cooperate/quic-cmp/'
 os.system('iperf3 -sD')
 
 def get_max(a, b):
