@@ -16,5 +16,5 @@ wget -P /home/johnsonli1993/gowork/src/github.com/mholt/caddy/caddy 23.106.133.1
 wget 23.106.133.19/certificate.crt
 wget 23.106.133.19/private.key
 wget -P /home/johnsonli1993/websites 23.106.133.19/mama.cn.zip
-sudo yum install -y unzip iperf3
+sudo yum install -y unzip iperf3 tmux
 unzip /home/johnsonli1993/websites/mama.cn.zip -d /home/johnsonli1993/websites/
