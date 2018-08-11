@@ -12,7 +12,7 @@ import sys
 serverHost = sys.argv[1]
 serverPort = 8698
 serverAddr = (serverHost, serverPort)
-serverDomain = 'tang123456.net'
+serverDomain = sys.argv[3]
 
 # host = '10.166.0.3'
 host = sys.argv[2]
