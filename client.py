@@ -152,8 +152,8 @@ if __name__ == '__main__':
 				driver.find_element_by_id('sockets-view-flush-button').send_keys(Keys.ENTER)
 				browser.get("https://" + serverDomain)
 				timer = PageLoadTimer(driver)
-    			time_dict = timer.get_event_times()
-    			if time_dict['redirectStart'] == 0:
+				time_dict = timer.get_event_times()
+				if time_dict['redirectStart'] == 0:
 				 	start = time_dict['fetchStart']
 				else:
 					start = time_dict['redirectStart']
