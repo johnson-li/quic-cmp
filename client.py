@@ -175,6 +175,7 @@ if __name__ == '__main__':
 				free_m_command = "sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'"
 				os.system(free_m_command)
 			if flag: test_times += 1
+			if test_times == 5: break
 			sum_times += 1
 		if test_times == 5:
 			result.write('success! \n')
