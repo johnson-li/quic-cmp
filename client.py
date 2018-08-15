@@ -7,6 +7,9 @@ import numpy as np
 import re
 import traceback
 import sys
+import collections
+from selenium.webdriver.common.keys import Keys
+import textwrap
 
 # serverHost = '35.228.171.127'
 serverHost = sys.argv[1]
@@ -20,6 +23,63 @@ port = 8698
 
 user_dir = '/home/cooperate/quic-cmp/'
 os.system('iperf3 -sD')
+
+class PageLoadTimer:
+    def __init__(self, driver):
+        """
+            takes:
+                'driver': webdriver instance from selenium.
+        """
+        self.driver = driver
+
+        self.jscript = textwrap.dedent("""
+            var performance = window.performance || {};
+            var timings = performance.timing || {};
+            return timings;
+            """)
+        self.flushscript = textwrap.dedent("""
+            chrome.send('flushSocketPools');
+        """)
+
+    def inject_timing_js(self):
+        timings = self.driver.execute_script(self.jscript)
+        return timings
+
+    def inject_socket_flush_js(self):
+        self.driver.execute_script(self.flushscript)
+
+    def get_event_times(self):
+        timings = self.inject_timing_js()
+        # the W3C Navigation Timing spec guarantees a monotonic clock:
+        #  "The difference between any two chronologically recorded timing
+        #   attributes must never be negative. For all navigations, including
+        #   subdocument navigations, the user agent must record the system
+        #   clock at the beginning of the root document navigation and define
+        #   subsequent timing attributes in terms of a monotonic clock
+        #   measuring time elapsed from the beginning of the navigation."
+        # However, some navigation events produce a value of 0 when unable to
+        # retrieve a timestamp.  We filter those out here:
+        good_values = [epoch for epoch in timings.values() if epoch != 0]
+        # rather than time since epoch, we care about elapsed time since first
+        # sample was reported until event time.  Since the dict we received was
+        # inherently unordered, we order things here, according to W3C spec
+        # fields.
+        ordered_events = ('navigationStart', 'redirectStart', 'fetchStart', 'domainLookupStart',
+                          'domainLookupEnd', 'connectStart', 'connectEnd',
+                          'secureConnectionStart', 'requestStart',
+                          'responseStart', 'responseEnd', 'domLoading',
+                          'domInteractive', 'domContentLoadedEventStart',
+                          'domContentLoadedEventEnd', 'domComplete',
+                          'loadEventStart', 'loadEventEnd'
+                          )
+        event_times = collections.OrderedDict()
+        for event in ordered_events:
+            if event in timings:
+                if timings[event] == 0:
+                    event_times[event] = 0
+                else:
+                    event_times[event] = timings[event] - min(good_values)
+        return event_times
 
 def get_max(a, b):
 	if a > b:
@@ -61,7 +121,6 @@ if __name__ == '__main__':
 		display.start()
 		url = data.split(':')[1].strip()
 		driverOptions = webdriver.ChromeOptions()
-		driverOptions.add_argument('--load-extension=' + user_dir + 'mypagetest')
 		driverOptions.add_argument('--no-proxy-server')
 		driverOptions.add_argument('--disable-application-cache')
 		driverOptions.add_argument('--aggressive-cache-discard')
@@ -69,6 +128,8 @@ if __name__ == '__main__':
 		driverOptions.add_argument('--enable-aggressive-domstorage-flushing')
 		driverOptions.add_argument('--no-sandbox')
 		driverOptions.add_argument('--new-window')
+		driverOptions.add_experimental_option("prefs", {'profile.managed_default_content_settings.javascript': 2})
+
 		if url.endswith('quic'):
 			driverOptions.add_argument('--enable-quic')
 			driverOptions.add_argument('--quic-host-whitelist=' + '"' + serverDomain + '"')
@@ -77,52 +138,48 @@ if __name__ == '__main__':
 		loadtime_list = []
 		test_times = 0
 		sum_times = 0
+		result.write(url + '\n')
 		while sum_times < 10:
-			wait_time = 5
 			flag = False
-			while wait_time < 30:
-				if flag: break
-				try:
-					if os.path.exists('/home/cooperate/Downloads/loadtime.txt'):
-						os.remove('/home/cooperate/Downloads/loadtime.txt')
-					browser = webdriver.Chrome(user_dir + "chromedriver", chrome_options=driverOptions)
-					browser.get("https://" + serverDomain)
-					time.sleep(wait_time)
-					loadtime_file = open('/home/cooperate/Downloads/loadtime.txt', 'r')
-					loadtime_str = loadtime_file.readline().strip(' ')[3:]
-					if test_times == 0: conn_time_str = loadtime_str.split(' ')[1]
-					loadtime_str = loadtime_str.split(' ')[0]
-					loadtime = float(loadtime_str)
-					loadtime_list.append(loadtime)
-					os.remove('/home/cooperate/Downloads/loadtime.txt')
-					browser.quit()
-					sync_command = 'sync'
-					os.system(sync_command)
-					free_m_command = "sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'"
-					os.system(free_m_command)
-					flag = True
-				except Exception as e:
-					traceback.print_exc()
-					wait_time += 10
-					print wait_time
-					browser.quit()
-					sync_command = 'sync'
-					os.system(sync_command)
-					free_m_command = "sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'"
-					os.system(free_m_command)
-					browser = webdriver.Chrome(user_dir + "chromedriver", chrome_options=driverOptions)
-			if wait_time < 30: test_times += 1
-			if test_times == 5: break
+			try:
+				flush_url = 'chrome://net-internals/#sockets'
+				browser = webdriver.Chrome(user_dir + "chromedriver", chrome_options=driverOptions)
+				browser.get(flush_url)
+				time.sleep(3)
+				driver.find_element_by_id('sockets-view-close-idle-button').send_keys(Keys.ENTER)
+				driver.find_element_by_id('sockets-view-close-idle-button').send_keys(Keys.ENTER)
+				driver.find_element_by_id('sockets-view-flush-button').send_keys(Keys.ENTER)
+				driver.find_element_by_id('sockets-view-flush-button').send_keys(Keys.ENTER)
+				browser.get("https://" + serverDomain)
+				timer = PageLoadTimer(driver)
+    			time_dict = timer.get_event_times()
+    			if time_dict['redirectStart'] == 0:
+				 	start = time_dict['fetchStart']
+				else:
+					start = time_dict['redirectStart']
+				plt = time_dict['loadEventEnd'] - start
+				browser.quit()
+				sync_command = 'sync'
+				os.system(sync_command)
+				free_m_command = "sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'"
+				os.system(free_m_command)
+				flag = True
+				result.write(str(plt) + '\n')
+				result.write(str(time_dict))
+				result.write('\n')
+			except Exception as e:
+				traceback.print_exc()
+				browser.quit()
+				sync_command = 'sync'
+				os.system(sync_command)
+				free_m_command = "sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'"
+				os.system(free_m_command)
+			if flag: test_times += 1
 			sum_times += 1
 		if test_times == 5:
-			temp = ''
-			print url
-			loadtime_list.sort()
-			temp = temp + url + ',' + str(loadtime_list[2]) + ',' + conn_time_str + '\n'
-			result.write(temp)
-			result.flush()
+			result.write('success! \n')
+		result.flush()
 		print 'client completed!'
 		clientConn.send('client completed!')
-		browser.quit()
 		display.stop()
 
