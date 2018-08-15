@@ -146,12 +146,12 @@ if __name__ == '__main__':
 				browser = webdriver.Chrome(user_dir + "chromedriver", chrome_options=driverOptions)
 				browser.get(flush_url)
 				time.sleep(3)
-				driver.find_element_by_id('sockets-view-close-idle-button').send_keys(Keys.ENTER)
-				driver.find_element_by_id('sockets-view-close-idle-button').send_keys(Keys.ENTER)
-				driver.find_element_by_id('sockets-view-flush-button').send_keys(Keys.ENTER)
-				driver.find_element_by_id('sockets-view-flush-button').send_keys(Keys.ENTER)
+				browser.find_element_by_id('sockets-view-close-idle-button').send_keys(Keys.ENTER)
+				browser.find_element_by_id('sockets-view-close-idle-button').send_keys(Keys.ENTER)
+				browser.find_element_by_id('sockets-view-flush-button').send_keys(Keys.ENTER)
+				browser.find_element_by_id('sockets-view-flush-button').send_keys(Keys.ENTER)
 				browser.get("https://" + serverDomain)
-				timer = PageLoadTimer(driver)
+				timer = PageLoadTimer(browser)
 				time_dict = timer.get_event_times()
 				if time_dict['redirectStart'] == 0:
 				 	start = time_dict['fetchStart']
