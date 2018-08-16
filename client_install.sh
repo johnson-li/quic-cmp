@@ -1,4 +1,3 @@
-sudo yum update
 sudo yum install -y wget hping3 iperf3 tmux
 sudo yum install -y libXcomposite libXcursor libXi libXrandr xdg-utils nss GConf2 cups redhat-lsb-core-4.1-27.el7.centos.1.x86_64 gtk3 libXScrnSaver libXdamage libXtst
 sudo yum remove -y google-chrome
