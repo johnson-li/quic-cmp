@@ -21,3 +21,5 @@ fi
 sudo pip install selenium
 sudo pip install pyvirtualdisplay
 sudo pip install numpy
+
+sudo python update_dns.py "$1"
