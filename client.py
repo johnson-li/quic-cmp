@@ -142,14 +142,19 @@ if __name__ == '__main__':
 		while sum_times < 10:
 			flag = False
 			try:
-				flush_url = 'chrome://net-internals/#sockets'
 				browser = webdriver.Chrome(user_dir + "chromedriver", chrome_options=driverOptions)
+				os.system('sudo systemctl restart nscd')
+				dns_url = 'chrome://net-internals/#dns'
+				browser.get(dns_url)
+				for times in range(10):
+					browser.find_element_by_id('dns-view-clear-cache').send_keys(Keys.ENTER)
+				flush_url = 'chrome://net-internals/#sockets'
 				browser.get(flush_url)
 				time.sleep(3)
-				browser.find_element_by_id('sockets-view-close-idle-button').send_keys(Keys.ENTER)
-				browser.find_element_by_id('sockets-view-close-idle-button').send_keys(Keys.ENTER)
-				browser.find_element_by_id('sockets-view-flush-button').send_keys(Keys.ENTER)
-				browser.find_element_by_id('sockets-view-flush-button').send_keys(Keys.ENTER)
+				for times in range(10):
+					browser.find_element_by_id('sockets-view-close-idle-button').send_keys(Keys.ENTER)
+				for times in range(10):
+					browser.find_element_by_id('sockets-view-flush-button').send_keys(Keys.ENTER)
 				browser.get("https://" + serverDomain)
 				timer = PageLoadTimer(browser)
 				time_dict = timer.get_event_times()

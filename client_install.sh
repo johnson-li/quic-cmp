@@ -4,6 +4,7 @@ sudo yum remove -y google-chrome
 sudo yum install -y Xvfb libXfont xorg-x11-fonts-misc.noarch xorg-x11-fonts-ethiopic.noarch xorg-x11-fonts-cyrillic.noarch xorg-x11-fonts-Type1.noarch xorg-x11-fonts-ISO8859-9-75dpi xorg-x11-fonts-ISO8859-9-100dpi screen lrzsz
 sudo yum install -y xorg-x11-fonts-100dpi.noarch xorg-x11-fonts-75dpi.noarch xorg-x11-fonts-ISO8859-1-100dpi.noarch xorg-x11-fonts-ISO8859-1-75dpi.noarch xorg-x11-fonts-ISO8859-14-100dpi.noarch xorg-x11-fonts-ISO8859-14-75dpi.noarch xorg-x11-fonts-ISO8859-15-100dpi.noarch xorg-x11-fonts-ISO8859-15-75dpi.noarch xorg-x11-fonts-ISO8859-2-100dpi.noarch xorg-x11-fonts-ISO8859-2-75dpi.noarch
 sudo yum install -y unzip
+sudo yum install -y nscd
 
 if [ ! -f google-chrome-stable_current_x86_64_63.0.3239.84.rpm ]; then
 	wget 23.106.133.19/google-chrome-stable_current_x86_64_63.0.3239.84.rpm
