@@ -22,3 +22,5 @@ fi
 sudo pip install selenium
 sudo pip install pyvirtualdisplay
 sudo pip install numpy
+
+echo finished
