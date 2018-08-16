@@ -21,5 +21,3 @@ fi
 sudo pip install selenium
 sudo pip install pyvirtualdisplay
 sudo pip install numpy
-git clone https://github.com/jiaxintang/plt-conn_test.git
-mv plt-conn_test mypagetest
