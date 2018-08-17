@@ -10,6 +10,7 @@ import sys
 import collections
 from selenium.webdriver.common.keys import Keys
 import textwrap
+import getpass 
 
 # serverHost = '35.228.171.127'
 serverHost = sys.argv[1]
@@ -21,7 +22,9 @@ serverDomain = sys.argv[3]
 host = sys.argv[2]
 port = 8698
 
-user_dir = '/home/cooperate/quic-cmp/'
+user = getpass.getuser()
+
+user_dir = "/home/%s/quic-cmp/" % user
 os.system('iperf3 -sD')
 
 class PageLoadTimer:
