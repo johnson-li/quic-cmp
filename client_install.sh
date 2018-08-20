@@ -1,5 +1,5 @@
 sudo yum install -y epel-release
-sudo yum install -y wget hping3 iperf3 tmux
+sudo yum install -y wget hping3 iperf3 tmux 'libasound*'
 sudo yum install -y libXcomposite libXcursor libXi libXrandr xdg-utils nss GConf2 cups redhat-lsb-core-4.1-27.el7.centos.1.x86_64 gtk3 libXScrnSaver libXdamage libXtst
 sudo yum remove -y google-chrome
 sudo yum install -y Xvfb libXfont xorg-x11-fonts-misc.noarch xorg-x11-fonts-ethiopic.noarch xorg-x11-fonts-cyrillic.noarch xorg-x11-fonts-Type1.noarch xorg-x11-fonts-ISO8859-9-75dpi xorg-x11-fonts-ISO8859-9-100dpi screen lrzsz

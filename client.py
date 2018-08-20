@@ -118,7 +118,6 @@ if __name__ == '__main__':
 
 	while 1:
 		data = clientConn.recv(1024)
-		print data
 		if not data.startswith('Server ready:'): continue
 		display = Display(visible=0, size=(800,600))
 		display.start()
